@@ -42,7 +42,7 @@ def get_user_quality(user_id):
     query = f"SELECT user_quality FROM tb_users WHERE user_id = '{user_id}'"
     sql.execute(query)
     result = sql.fetchone()
-    return result[0]
+    return result
 
 
 def get_all():
