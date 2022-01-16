@@ -4,14 +4,9 @@ import createdb
 
 bot = telebot.TeleBot(config.TOKEN, parse_mode='HTML')
 
-global user_id, user_quality
-
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    global user_id
-    user_id = message.chat.id
-
     bot.send_message(message.chat.id,
                      "Это бот для сохранения и напоминания \n"
                      "вашего качества на текущий год.")
@@ -28,7 +23,6 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['save'])
 def save(message):
-    global user_id, user_quality
     user_id = message.chat.id
     user_quality = createdb.get_user_quality(user_id)
 
@@ -58,16 +52,14 @@ def query_handler(call):
 def set_quality(message):
 
     if is_correct_quality(message.text):
-        global user_quality
         user_quality = message.text.upper()
-        
         bot.send_message(message.chat.id, f"Ваше качество на текущий год - <b>{user_quality}</b>")
 
-        is_check_user = createdb.check_user_id(user_id)
+        is_check_user = createdb.check_user_id(message.chat.id)
         if is_check_user is None:
-            createdb.insert_user_quality(user_id, user_quality)
+            createdb.insert_user_quality(message.chat.id, user_quality)
         else:
-            createdb.update_user_quality(user_id, user_quality)
+            createdb.update_user_quality(message.chat.id, user_quality)
 
     else:
         msg_try = bot.send_message(message.chat.id, "Некорректные символы. Попробуйте еще раз:")
@@ -89,7 +81,6 @@ def is_correct_quality(text):
 
 @bot.message_handler(commands=['quality'])
 def quality(message):
-    global user_id
     user_id = message.chat.id
 
     is_check_user = createdb.check_user_id(user_id)
