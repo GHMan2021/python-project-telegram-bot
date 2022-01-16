@@ -23,14 +23,13 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['save'])
 def save(message):
-    user_id = message.chat.id
-    user_quality = createdb.get_user_quality(user_id)
+    user_quality = createdb.get_user_quality(message.chat.id)
 
     if user_quality is None:
         msg_input = bot.send_message(message.chat.id, "Введите качество на текущий год:")
         bot.register_next_step_handler(msg_input, set_quality)
     else:
-        user_quality = createdb.select_user_quality(user_id)
+        user_quality = createdb.select_user_quality(message.chat.id)
         bot.send_message(message.chat.id, f"Ваше качество на текущий год - <b>{user_quality}</b>")
         markup = telebot.types.InlineKeyboardMarkup()
         markup.row(telebot.types.InlineKeyboardButton(text="Да", callback_data="yes"),
