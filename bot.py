@@ -31,6 +31,7 @@ def save(message):
     else:
         user_quality = createdb.select_user_quality(message.chat.id)
         bot.send_message(message.chat.id, f"Ваше качество на текущий год - <b>{user_quality}</b>")
+
         markup = telebot.types.InlineKeyboardMarkup()
         markup.row(telebot.types.InlineKeyboardButton(text="Да", callback_data="yes"),
                    telebot.types.InlineKeyboardButton(text="Нет", callback_data="no"))
@@ -80,13 +81,11 @@ def is_correct_quality(text):
 
 @bot.message_handler(commands=['quality'])
 def quality(message):
-    user_id = message.chat.id
-
-    is_check_user = createdb.check_user_id(user_id)
+    is_check_user = createdb.check_user_id(message.chat.id)
     if is_check_user is None:
         bot.send_message(message.chat.id, "Качество ранее не было сохранено.")
     else:
-        saved_user_quality = createdb.select_user_quality(user_id)
+        saved_user_quality = createdb.select_user_quality(message.chat.id)
         bot.send_message(message.chat.id, f"Ваше качество на текущий год - <b>{saved_user_quality}</b>")
 
 
