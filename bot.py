@@ -98,7 +98,7 @@ def force_vita(message):
 @bot.message_handler(commands=['all'])
 def get_all(message):
     rows = createdb.get_all()
-    result = ""
+    result = "id telegram - value\n"
     for line in rows:
         result += f"{line[0]} - {line[1]}\n"
     bot.send_message(message.chat.id, f"{result}")
