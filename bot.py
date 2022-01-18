@@ -29,8 +29,7 @@ def save(message):
         msg_input = bot.send_message(message.chat.id, "Введите качество на текущий год:")
         bot.register_next_step_handler(msg_input, set_quality)
     else:
-        user_quality = createdb.select_user_quality(message.chat.id)
-        bot.send_message(message.chat.id, f"Ваше качество на текущий год - <b>{user_quality}</b>")
+        bot.send_message(message.chat.id, f"Ваше качество на текущий год - <b>{user_quality[0]}</b>")
 
         markup = telebot.types.InlineKeyboardMarkup()
         markup.row(telebot.types.InlineKeyboardButton(text="Да", callback_data="yes"),
@@ -85,31 +84,15 @@ def quality(message):
     if is_check_user is None:
         bot.send_message(message.chat.id, "Качество ранее не было сохранено.")
     else:
-        saved_user_quality = createdb.select_user_quality(message.chat.id)
-        bot.send_message(message.chat.id, f"Ваше качество на текущий год - <b>{saved_user_quality}</b>")
+        saved_user_quality = createdb.get_user_quality(message.chat.id)
+        bot.send_message(message.chat.id, f"Ваше качество на текущий год - <b>{saved_user_quality[0]}</b>")
 
 
 @bot.message_handler(commands=['fv'])
 def force_vita(message):
-    bot.send_message(message.chat.id,
-                     "<b>Достоинства ЖС на 2021-2022 учебный год:</b>\n"
-                     "<i>Лена Д. - Решимость\n"
-                     "Лёша Д. - Скромность\n"
-                     "Ирина Ф. - Толерантность\n"
-                     "Лена В. - Простота-Искренность\n"
-                     "Ксюша П. - Внимание\n"
-                     "Света П. - Умение быть вместе\n"
-                     "Юрий Н. - Единство-Объединение\n"
-                     "Тамара С. - Ритм\n"
-                     "Настя Г. - Внутренняя радость\n"
-                     "Рома Г. - Усилие\n"
-                     "Катя Г. - Крепость-Твердость духа\n"
-                     "Света К. - Умение быть вместе\n"
-                     "Неля С. - Гармония\n"
-                     "Лена К. - Надежда\n"
-                     "Лиза С. - Обеты\n"
-                     "Миша С. - Послушание\n"
-                     "Марина В. - Послушание</i>")
+    with open("user_values.txt", encoding="utf-8") as f:
+        result = f.read()
+    bot.send_message(message.chat.id, result)
 
 
 @bot.message_handler(commands=['all'])

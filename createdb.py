@@ -31,13 +31,6 @@ def update_user_quality(user_id, user_quality):
     db.commit()
 
 
-def select_user_quality(user_id):
-    query = f"SELECT user_quality FROM tb_users WHERE user_id = '{user_id}'"
-    cur.execute(query)
-    result = cur.fetchone()
-    return result[0]
-
-
 def get_user_quality(user_id):
     query = f"SELECT user_quality FROM tb_users WHERE user_id = '{user_id}'"
     cur.execute(query)
