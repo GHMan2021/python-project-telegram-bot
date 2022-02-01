@@ -1,15 +1,14 @@
 import sqlite3
 
-db = sqlite3.connect('datebase.db', check_same_thread=False)
-cur = db.cursor()
+with sqlite3.connect('datebase.db', check_same_thread=False) as db:  # множественные подключения к БД
+    cur = db.cursor()
 
-cur.execute("""
-    CREATE TABLE IF NOT EXISTS tb_users (
-        user_id TEXT,
-        user_quality TEXT
-    )
-""")
-db.commit()
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS tb_users (
+            user_id TEXT,
+            user_quality TEXT
+        )
+    """)
 
 
 def check_user_id(user_id):
